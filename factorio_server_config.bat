@@ -1,4 +1,4 @@
-set ec2_instance=ec2-18-168-205-222.eu-west-2.compute.amazonaws.com
+set ec2_instance=ec2-13-42-26-28.eu-west-2.compute.amazonaws.com
 set ec2_user=ec2-user
 
 
@@ -6,6 +6,7 @@ set pem_key="C:\Users\will\Downloads\factorio_pem.pem"
 set factorio_save_directory=C:\Users\will\AppData\Roaming\Factorio\saves\
 
 @echo off
+setlocal enabledelayedexpansion
 cls
 
 echo 1. configure new instance
@@ -22,15 +23,16 @@ IF %menu_action%==3 (
 	cls
 	echo files on remove server
 	ssh -i %pem_key% %ec2_user%@%ec2_instance% ls
-	set /P save_name=Enter save file name inc zip: 
-	ssh -i %pem_key% %ec2_user%@%ec2_instance% sudo /opt/factorio/bin/x64/factorio --start-server %save_name%
+	set /P save_name=Enter save file name - inc zip: 
+	ssh -i %pem_key% %ec2_user%@%ec2_instance% sudo /opt/factorio/bin/x64/factorio --start-server !save_name!
     )
 	
 IF %menu_action%==2 (
 	cls
-	set /P save_name=Enter save file name:
-	if exist %factorio_save_directory%%save_name%.zip scp -i %pem_key% %factorio_save_directory%%save_name%.zip %ec2_user%@%ec2_instance%:%save_name%.zip
-	if not exist %factorio_save_directory%%save_name%.zip echo file not found
+	dir /b /o %factorio_save_directory%
+	set /P save_name=Enter save file name - inc zip:
+	if exist %factorio_save_directory%!save_name! scp -i %pem_key% %factorio_save_directory%!save_name! %ec2_user%@%ec2_instance%:!save_name!
+	if not exist %factorio_save_directory%!save_name! echo file not found
 	)
 	
 IF %menu_action%==4 (
@@ -44,7 +46,7 @@ IF %menu_action%==5 (
 	echo files on remove server
 	ssh -i %pem_key% %ec2_user%@%ec2_instance% ls
 	set /P save_to_download=Enter save file name inc zip: 
-	scp -i %pem_key% %ec2_user%@%ec2_instance%:%save_to_download% %factorio_save_directory%%save_to_download%
+	scp -i %pem_key% %ec2_user%@%ec2_instance%:!save_to_download! %factorio_save_directory%!save_to_download!
 	)
 IF %menu_action%==1 (
 	cls
