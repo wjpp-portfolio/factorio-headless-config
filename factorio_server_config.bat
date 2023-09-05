@@ -2,8 +2,8 @@ set ec2_instance=ec2-13-40-85-34.eu-west-2.compute.amazonaws.com
 set ec2_user=ec2-user
 
 
-set pem_key="C:\Users\will\Downloads\factorio_pem.pem"
-set factorio_save_directory=C:\Users\will\AppData\Roaming\Factorio\saves\
+set pem_key="%USERPROFILE%\Downloads\factorio_pem.pem"
+set factorio_save_directory=%USERPROFILE%\AppData\Roaming\Factorio\saves\
 
 @echo off
 setlocal enabledelayedexpansion
