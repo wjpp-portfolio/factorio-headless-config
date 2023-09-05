@@ -12,7 +12,7 @@
 
 ## factorio_server_config.bat
 ### 1. configure new instance
-sets up ec2 instance for factorio by creating user, directories, and downloading factorio headless server config and extracting it, and creating a service to run the server.  Also uploads headless server config files.  Note the config on the machine is via shell script `configure_new_ec2_instance.sh`
+sets up ec2 instance for factorio by creating user, directories, and downloading factorio headless server config and extracting it, and creating a service to run the server.  Also uploads headless server config files.  Note the config of the instance is via uploaded shell script `configure_new_ec2_instance.sh`
 ### 2. upload save to server
 uploads chosen save file from default windows save location to server and starts server service
 ### 3. upload server config files
