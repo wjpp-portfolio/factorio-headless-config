@@ -6,9 +6,14 @@
 
  ## Steps
  1. start instance in aws
- 2. paste instance address into `ec2_instance` variable in `factorio_server_config.bat`
- 3. rename `pem_key` variable to correct file name
- 4. run `factorio_server_config.bat`
+    - Linux AIM
+    - t2.medium or t2.large
+    - SSH and UDP 34197 inbound
+    - default EBS storage (8gb)
+    - Auto-assign public IP
+ 3. paste instance address into `ec2_instance` variable in `factorio_server_config.bat`
+ 4. rename `pem_key` variable to correct file name
+ 5. run `factorio_server_config.bat`
 
 ## factorio_server_config.bat
 ### 1. configure new instance
