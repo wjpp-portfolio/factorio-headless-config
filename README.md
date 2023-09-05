@@ -26,6 +26,6 @@ uploads config files for headless server and restarts factorio service
 downloads config file from server back into local factorio save directory
 
 ## Other
-- instance can be terminated after use to free up reseources as config takes ~20 seconds to complete once new instance is running
-- if instance is kept, factorio service will auto start the last save file if present on boot
+- instance can be terminated after use to free up resources as config takes ~20 seconds to complete once new instance is running
+- if instance is kept, factorio service will auto start the last save file if present on next boot
 - t2.large is plently and potentially overkill for 2 people
