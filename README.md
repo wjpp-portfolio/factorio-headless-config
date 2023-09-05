@@ -17,4 +17,10 @@ sets up ec2 instance for factorio by creating user, directories, and downloading
 uploads chosen save file from default windows save location to server and starts server service
 ### 3. upload server config files
 uploads config files for headless server and restarts factorio service
-### 4. downloads save file back into local factorio save directory
+### 4. downloads save file
+downloads config file from server back into local factorio save directory
+
+## Other
+- instance can be terminated after use to free up reseources as config takes ~20 seconds to complete once new instance is running
+- if instance is kept, factorio service will auto start the last save file if present on boot
+- t2.large is plently and potentially overkill for 2 people
