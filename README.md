@@ -6,7 +6,7 @@
 
  ## Steps
  1. start instance in aws
- 2. paste instance address into ec2_instance variable in `factorio_server_config.bat`
+ 2. paste instance address into `ec2_instance` variable in `factorio_server_config.bat`
  3. rename pem_key to correct file name
  4. run `factorio_server_config.bat`
 
