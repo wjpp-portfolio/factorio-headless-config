@@ -1,0 +1,73 @@
+---
+- name: Install Factorio
+  hosts: factorio_headless
+  become: yes
+  
+  handlers:
+  - name: Restart factorio server
+    service:
+      name: factorio.service
+      state: restarted
+  
+  tasks:
+  - name: Ensure 'factorio' group exists
+    group:
+      name: factorio
+      state: present
+  - name: Ensure 'factorio' user exists
+    user:
+      name: factorio
+      group: factorio
+      create_home: false
+      
+  - name: Download latest headless archive
+    get_url:
+      url: https://factorio.com/get-download/stable/headless/linux64
+      dest: /tmp/factorio_headless.tar.gz
+      mode: '665'
+      
+  - name: Unarchive headless archive
+    unarchive:
+      src: /tmp/factorio_headless.tar.gz
+      dest: /opt
+      remote_src: true
+      group: factorio
+      owner: factorio
+      creates: 
+            
+  - name: Copy server-settings file
+    copy:
+      src: /home/will/Documents/Python Projects/factorio-headless-config/server-settings.json
+      dest: /opt/factorio/data/server-settings.json
+      
+  - name: Copy map-settings file
+    copy:
+      src: /home/will/Documents/Python Projects/factorio-headless-config/map-settings.json
+      dest: /opt/factorio/data/map-settings.json
+      
+  - name: Copy map-gen-settings file
+    copy:
+      src: /home/will/Documents/Python Projects/factorio-headless-config/map-gen-settings.json
+      dest: /opt/factorio/data/map-gen-settings.json
+      
+  - name: Create saves directory
+    file:
+      path: /opt/factorio/saves
+      state: directory
+      mode: '755'
+  - name: Upload latest save file
+    copy:
+      src: /home/will/Documents/Python Projects/factorio-headless-config/abc.zip
+      dest: /opt/factorio/saves/
+      
+  - name: Copy factorio.service file
+    copy:
+      src: /home/will/Documents/Python Projects/factorio-headless-config/factorio.service
+      dest: /etc/systemd/system
+      
+  - name: Ensure headless server is running
+    systemd:
+      state: started
+      enabled: true
+      daemon_reload: true
+      name: factorio.service
