@@ -1,6 +1,11 @@
 import boto3
 import sys
 import subprocess
+import ansible
+
+KEY_PATH = '$HOME/factorio_pem.pem'
+ANSIBLE_PLAYBOOK = 'playbook.yaml'
+INSTANCE_USER = 'ec2-user'
 
 class Game_Server:
     def __init__(self, aws_session, template_name):
@@ -11,25 +16,29 @@ class Game_Server:
         self.deploy_game_sever(self.session, template_name)
 
     def deploy_game_sever(self, aws_session, template_name):
-        self.status = 'Launching instance'
+        print('Launching instance')
         start_instance = self.launch_instance(template_name)
         self.server_id = start_instance['Instances'][0]['InstanceId']
-        self.status = 'Awaiting for system boot'
 
-        print('Waiting for PublicDnsName')
+        print('Waiting for server ready status ({})'.format(self.server_id))
+        
         while True:
             info = self.get_instance_info()
             self.state = info['State']['Name']
      
-            if 'PublicDnsName' in info and len(info['PublicDnsName']) > 0:
+            if 'PublicDnsName' in info.keys() and len(info['PublicDnsName']) > 0:
                 self.dns_name = info['PublicDnsName']
 
-            if self.dns_name is not None: #and self.state is 'running':
+            if self.dns_name is not None and self.state == 'running':
                 break
-
+        print('Configuring instance')
         print(self.server_id)
         print(self.dns_name)
         print(self.state)
+
+
+        #ansible-playbook --private-key KEY_PATH -u INSTANCE_USER -i self.dns_name, ANSIBLE_PLAYBOOK
+
 
 
     def launch_instance(self, template):
@@ -45,22 +54,6 @@ class Game_Server:
     def get_instance_info(self):
         response = self.session.describe_instances(InstanceIds=[self.server_id])
         return response['Reservations'][0]['Instances'][0] 
-
-    def get_dns_name(self) -> str:
-        response = self.get_instance_info()
-        if 'PublicDnsName' in response and len(response['PublicDnsName']) > 1:
-            return response['PublicDnsName']
-        else:
-            return ''
-
-    def get_abc(self):
-        response = self.session.describe_instances(
-            InstanceIds=[self.server_id],
-            Filters=[{
-                'Name': 'instance-state-name', 'Values': ['Running']
-            }]
-        )
-        print(response)
     
     def upload_save():
         pass

@@ -1,6 +1,6 @@
 ---
 - name: Install Factorio
-  hosts: factorio_headless
+  hosts: all
   become: yes
   
   handlers:
